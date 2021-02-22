@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameBehavior : MonoBehaviour
 {
     public bool showWinScreen = false;
+    public bool showLossScreen = false;
     public string labelText = "Collect all 4 items and win your freedom!";
     public int maxItems = 4;
 
@@ -14,11 +15,17 @@ public class GameBehavior : MonoBehaviour
 
     public GameObject HealthText;
     public GameObject AmmoText;
+    public GameObject RestartButton;
+    public GameObject LossPanel;
+    public GameObject WinPanel;
+    public Text Restart;
 
     public void Start()
     {
         HealthText = GameObject.Find("HealthText");
         AmmoText = GameObject.Find("AmmoText");
+        HealthText.GetComponent<Text>().text = _playerHP.ToString();
+        AmmoText.GetComponent<Text>().text = AmmoAmount.ToString();
     }
 
     public int Items
@@ -32,9 +39,11 @@ public class GameBehavior : MonoBehaviour
 
             if(_itemsCollected >= maxItems)
             {
-                labelText = "You've found all the items!";
+                Restart.text = "You've found all the items!";
                 showWinScreen = true;
                 Time.timeScale = 0f;
+                WinPanel.SetActive(true);
+                RestartButton.SetActive(true);
             }
             else
             {
@@ -43,7 +52,7 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-    private int _playerHP = 10;
+    private int _playerHP = 1;
 
     public int HP
     {
@@ -53,7 +62,16 @@ public class GameBehavior : MonoBehaviour
         {
             _playerHP = value;
             HealthText.GetComponent<Text>().text = value.ToString();
-            Debug.LogFormat("Lives: {0}", _playerHP);
+            if (_playerHP <= 0)
+            {
+                Debug.Log("I lost!!!");
+                showLossScreen = true;
+                Time.timeScale = 0;
+                Restart.text = "You want another life with that?".ToString();
+                LossPanel.SetActive(true);
+                RestartButton.SetActive(true);
+            }
+            
         }
     }
 
@@ -69,6 +87,14 @@ public class GameBehavior : MonoBehaviour
            // Debug.Log("Ammo Collected");
 
         }
+    }
+
+    public void RestartLevel()
+    {
+
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1.0f;
+
     }
 
    /* void OnGUI()

@@ -79,4 +79,12 @@ public class PlayerBehaviorScript : MonoBehaviour
 
     }
 
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.name == "Enemy")
+        {
+            gameManager.HP -= 1;
+        }
+    }
+
 }
