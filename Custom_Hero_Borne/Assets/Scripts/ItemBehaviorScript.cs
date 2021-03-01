@@ -21,7 +21,7 @@ public class ItemBehaviorScript : MonoBehaviour
             Destroy(transform.parent.gameObject);
             Debug.Log("Item Collected");
 
-            gameManager.Items += 1;
+            //gameManager.Items += 1;
         }
 
     }

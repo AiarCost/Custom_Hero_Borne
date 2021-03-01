@@ -9,16 +9,20 @@ public class GameBehavior : MonoBehaviour
     public bool showWinScreen = false;
     public bool showLossScreen = false;
     public string labelText = "Collect all 4 items and win your freedom!";
-    public int maxItems = 4;
+    public int EnemyAlive = 1;
+    public bool Invulnerable = false;
+    public float Timer = 0f;
 
-    private int _itemsCollected = 0;
+    private int _EnemyKilled = 0;
 
     public GameObject HealthText;
     public GameObject AmmoText;
     public GameObject RestartButton;
     public GameObject LossPanel;
     public GameObject WinPanel;
+    public GameObject InvulerabilityPanel;
     public Text Restart;
+    
 
     public void Start()
     {
@@ -26,20 +30,35 @@ public class GameBehavior : MonoBehaviour
         AmmoText = GameObject.Find("AmmoText");
         HealthText.GetComponent<Text>().text = _playerHP.ToString();
         AmmoText.GetComponent<Text>().text = AmmoAmount.ToString();
+
     }
 
-    public int Items
+    public void FixedUpdate()
     {
-        get { return _itemsCollected; }
+        if (Timer > 0)
+        {
+            Timer -= Time.deltaTime;
+            InvulerabilityPanel.SetActive(true);
+        }
+        else
+        {
+            InvulerabilityPanel.SetActive(false);
+            Invulnerable = false;
+        }
+    }
+
+    public int EnemyKilled
+    {
+        get { return _EnemyKilled; }
 
         set
         {
-            _itemsCollected = value;
-            Debug.LogFormat("Items: {0}", _itemsCollected);
+            _EnemyKilled = value;
+            Debug.LogFormat("Killed: {0}", _EnemyKilled);
 
-            if(_itemsCollected >= maxItems)
+            if(_EnemyKilled >= EnemyAlive)
             {
-                Restart.text = "You've found all the items!";
+                Restart.text = "You've killed all the enemy!";
                 showWinScreen = true;
                 Time.timeScale = 0f;
                 WinPanel.SetActive(true);
@@ -47,12 +66,12 @@ public class GameBehavior : MonoBehaviour
             }
             else
             {
-                labelText = "Item found, only " + (maxItems - _itemsCollected) + " more to go!";
+                labelText = "Enemy kiled, only " + (EnemyAlive - _EnemyKilled) + " more to go!";
             }
         }
     }
 
-    private int _playerHP = 1;
+    private int _playerHP = 10;
 
     public int HP
     {
@@ -60,18 +79,20 @@ public class GameBehavior : MonoBehaviour
 
         set
         {
-            _playerHP = value;
-            HealthText.GetComponent<Text>().text = value.ToString();
-            if (_playerHP <= 0)
+            if (!Invulnerable)
             {
-                Debug.Log("I lost!!!");
-                showLossScreen = true;
-                Time.timeScale = 0;
-                Restart.text = "You want another life with that?".ToString();
-                LossPanel.SetActive(true);
-                RestartButton.SetActive(true);
+                _playerHP = value;
+                HealthText.GetComponent<Text>().text = value.ToString();
+                if (_playerHP <= 0)
+                {
+                    Debug.Log("I lost!!!");
+                    showLossScreen = true;
+                    Time.timeScale = 0;
+                    Restart.text = "You want another life with that?".ToString();
+                    LossPanel.SetActive(true);
+                    RestartButton.SetActive(true);
+                }
             }
-            
         }
     }
 

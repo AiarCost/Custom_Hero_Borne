@@ -8,12 +8,12 @@ public class PlayerBehaviorScript : MonoBehaviour
     public float moveSpeed = 10f;
     public float rotateSpeed = 15f;
 
-    public float jumpVelocity = 5f;
+    public float jumpVelocity = 25f;
     public float distanceToGround = 0.1f;
     public LayerMask groundlayer;
 
     public GameObject bullet;
-    public float bulletSpeed = 100f;
+    public float bulletSpeed = 1f;
 
     private float vInput;
     private float hInput;

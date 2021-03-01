@@ -11,6 +11,7 @@ public class EnemyBehaviorScript : MonoBehaviour
     public List<Transform> locations;
     private int locationIndex = 0;
     private NavMeshAgent agent;
+    private GameBehavior GameManager;
 
     private int _lives = 3;
     public int EnemyLives
@@ -25,6 +26,7 @@ public class EnemyBehaviorScript : MonoBehaviour
             {
                 Destroy(this.gameObject);
                 Debug.Log("EnemyDown");
+                GameManager.EnemyKilled += 1;
             }
         }
     }
@@ -33,6 +35,7 @@ public class EnemyBehaviorScript : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").transform;
+        GameManager = GameObject.Find("GameManager").GetComponent<GameBehavior>();
         InitializePatrolRoute();
         MoveToNextPatrolLocation();
     }
