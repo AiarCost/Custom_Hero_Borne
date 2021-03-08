@@ -93,8 +93,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.63
+  m_Height: 2.18
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &7009269107905941205
@@ -108,7 +108,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 8
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7009269107905941206
 MonoBehaviour:
@@ -122,6 +122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e3481b3b75d6842b19b9a8c8a33a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  patrolRoute: {fileID: 0}
+  locations: []
 --- !u!195 &-1192624811215218683
 NavMeshAgent:
   m_ObjectHideFlags: 0

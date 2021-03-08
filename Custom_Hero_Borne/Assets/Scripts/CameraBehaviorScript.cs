@@ -19,6 +19,6 @@ public class CameraBehaviorScript : MonoBehaviour
     void LateUpdate()
     {
         transform.position = target.TransformPoint(CamOffset);
-        transform.LookAt(target);
+       // transform.LookAt(target);
     }
 }

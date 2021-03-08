@@ -12,6 +12,7 @@ public class EnemyBehaviorScript : MonoBehaviour
     private int locationIndex = 0;
     private NavMeshAgent agent;
     private GameBehavior GameManager;
+    public bool Attacking = false;
 
     private int _lives = 3;
     public int EnemyLives
@@ -59,18 +60,26 @@ public class EnemyBehaviorScript : MonoBehaviour
 
     void MoveToNextPatrolLocation()
     {
-        if (locations.Count == 0)
+        if (Attacking)
         {
-            return;
+            agent.destination = player.position;
         }
-        agent.destination = locations[locationIndex].position;
+        else
+        {
+            if (locations.Count == 0)
+            {
+                return;
+            }
+            agent.destination = locations[locationIndex].position;
 
-        locationIndex = (locationIndex + 1) % locations.Count;
+            locationIndex = (locationIndex + 1) % locations.Count;
+        }
     }
 
 
     void OnTriggerEnter(Collider col)
     {
+        Attacking = true;
         agent.destination = player.position;
         if (col.name == "Player")
             Debug.Log("Player Detected - attack!");
@@ -79,6 +88,7 @@ public class EnemyBehaviorScript : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
+        Attacking = false;
         if (col.name == "Player")
             Debug.Log("Player out of range, resume patrol");
 

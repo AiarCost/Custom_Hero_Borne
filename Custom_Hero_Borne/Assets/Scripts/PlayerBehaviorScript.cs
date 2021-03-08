@@ -14,11 +14,14 @@ public class PlayerBehaviorScript : MonoBehaviour
 
     public GameObject bullet;
     public float bulletSpeed = 1f;
+    public bool JumpNow = false;
+    public bool BulletNow = false;
 
     private float vInput;
     private float hInput;
     private CapsuleCollider col;
     private Rigidbody _rb;
+    public float HealthTickingDown = .25f;
 
     public GameBehavior gameManager;
 
@@ -35,34 +38,50 @@ public class PlayerBehaviorScript : MonoBehaviour
 
         vInput = Input.GetAxis("Vertical") * moveSpeed;
         hInput = Input.GetAxis("Horizontal") * rotateSpeed;
-
-   /*   transform.Translate(Vector3.forward * vInput * Time.deltaTime);
-        transform.Rotate(Vector3.up * hInput * Time.deltaTime);  */
-    }
-
-    void FixedUpdate()
-    {
-        //Jump Mechanic
-        if(IsGrounded() && Input.GetKeyDown(KeyCode.Space))
+        //Jump Detection
+        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
-            _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
+            JumpNow = true;
         }
 
-        //bullet Mechanic
+        //Shoot Detection and conditionals
         if (Input.GetMouseButtonDown(0))
-        {   if (gameManager.Ammo > 0)
+        {
+            if (gameManager.Ammo > 0)
             {
-                GameObject newBullet = Instantiate(bullet, transform.position + new Vector3(1, 0, 0), transform.rotation) as GameObject;
-                Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
-                bulletRB.velocity = transform.forward * bulletSpeed;
-                gameManager.Ammo--;
+                BulletNow = true;
             }
             else
                 Debug.Log("You ran out of Ammo!!!");
 
         }
 
+        if (HealthTickingDown > 0)
+            HealthTickingDown -= Time.deltaTime;
+        /*   transform.Translate(Vector3.forward * vInput * Time.deltaTime);
+             transform.Rotate(Vector3.up * hInput * Time.deltaTime);  */
+    }
 
+    void FixedUpdate()
+    {
+        //Jump Mechanic
+        if (JumpNow)
+        {
+            _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
+            JumpNow = false;
+        }
+
+        //bullet Mechanic
+        if (BulletNow)
+        {
+            GameObject newBullet = Instantiate(bullet, transform.position + transform.forward + new Vector3(0,.25f,0), transform.rotation) as GameObject;
+            Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
+            bulletRB.velocity = transform.forward * bulletSpeed;
+            gameManager.Ammo--;
+            BulletNow = false;
+        }
+
+        //Movement Mechanic
         Vector3 rotation = Vector3.up * hInput;
         Quaternion angleRot = Quaternion.Euler(rotation * Time.fixedDeltaTime);
         _rb.MovePosition(transform.position + transform.forward * vInput * Time.fixedDeltaTime);
@@ -81,9 +100,19 @@ public class PlayerBehaviorScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.CompareTag("Enemy"))
         {
             gameManager.HP -= 1;
+            HealthTickingDown = .25f;
+        }
+    }
+
+    private void OnCollisionStay(Collision col)
+    {
+        if(col.gameObject.CompareTag("Enemy") && HealthTickingDown<=0)
+        {
+            gameManager.HP -= 1;
+            HealthTickingDown = .25f;
         }
     }
 
