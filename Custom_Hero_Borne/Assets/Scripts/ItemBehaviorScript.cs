@@ -6,10 +6,12 @@ public class ItemBehaviorScript : MonoBehaviour
 {
 
     public GameBehavior gameManager;
+    AudioSource AudioPlayer;
 
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameBehavior>();
+        AudioPlayer = GetComponent<AudioSource>();
 
     }
 
@@ -18,6 +20,7 @@ public class ItemBehaviorScript : MonoBehaviour
 
         if(col.gameObject.name == "Player")
         {
+
             Destroy(transform.parent.gameObject);
             Debug.Log("Item Collected");
 
