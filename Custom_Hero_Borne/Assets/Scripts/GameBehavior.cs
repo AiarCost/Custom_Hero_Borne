@@ -22,6 +22,8 @@ public class GameBehavior : MonoBehaviour
     public GameObject WinPanel;
     public GameObject InvulerabilityPanel;
     public Text Restart;
+
+    SceneBehavior Scene;
     
 
     public void Start()
@@ -30,7 +32,7 @@ public class GameBehavior : MonoBehaviour
         AmmoText = GameObject.Find("AmmoText");
         HealthText.GetComponent<Text>().text = _playerHP.ToString();
         AmmoText.GetComponent<Text>().text = AmmoAmount.ToString();
-
+        Scene = GameObject.Find("SceneManager").GetComponent<SceneBehavior>();
     }
 
     public void FixedUpdate()
@@ -58,11 +60,12 @@ public class GameBehavior : MonoBehaviour
 
             if(_EnemyKilled >= EnemyAlive)
             {
-                Restart.text = "You've killed all the enemy!";
-                showWinScreen = true;
-                Time.timeScale = 0f;
-                WinPanel.SetActive(true);
-                RestartButton.SetActive(true);
+                //Restart.text = "You've killed all the enemy!";
+                //showWinScreen = true;
+                //Time.timeScale = 0f;
+                //WinPanel.SetActive(true);
+                //RestartButton.SetActive(true);
+                Scene.WinGame();
             }
             else
             {
@@ -85,12 +88,14 @@ public class GameBehavior : MonoBehaviour
                 HealthText.GetComponent<Text>().text = value.ToString();
                 if (_playerHP <= 0)
                 {
-                    Debug.Log("I lost!!!");
-                    showLossScreen = true;
-                    Time.timeScale = 0;
-                    Restart.text = "You want another life with that?".ToString();
-                    LossPanel.SetActive(true);
-                    RestartButton.SetActive(true);
+                    //Debug.Log("I lost!!!");
+                    //showLossScreen = true;
+                    //Time.timeScale = 0;
+                    //Restart.text = "You want another life with that?".ToString();
+                    //LossPanel.SetActive(true);
+                    //RestartButton.SetActive(true);
+
+                    Scene.LoseGame();
                 }
             }
         }
