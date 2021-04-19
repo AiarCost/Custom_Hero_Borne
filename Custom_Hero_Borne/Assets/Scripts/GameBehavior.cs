@@ -22,6 +22,7 @@ public class GameBehavior : MonoBehaviour
     public GameObject WinPanel;
     public GameObject InvulerabilityPanel;
     public Text Restart;
+    public GameObject pauseScreen;
 
     SceneBehavior Scene;
     
@@ -33,8 +34,16 @@ public class GameBehavior : MonoBehaviour
         HealthText.GetComponent<Text>().text = _playerHP.ToString();
         AmmoText.GetComponent<Text>().text = AmmoAmount.ToString();
         Scene = GameObject.Find("SceneManager").GetComponent<SceneBehavior>();
+        pauseScreen.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseLevel();
+        }
+    }
     public void FixedUpdate()
     {
         if (Timer > 0)
@@ -120,6 +129,19 @@ public class GameBehavior : MonoBehaviour
 
         SceneManager.LoadScene(0);
         Time.timeScale = 1.0f;
+
+    }
+
+    public void PauseLevel()
+    {
+        Time.timeScale = 0;
+        pauseScreen.SetActive(true);
+    }
+
+    public void ResumeLevel()
+    {
+        Time.timeScale = 1.0f;
+        pauseScreen.SetActive(false);
 
     }
 
