@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class GameBehavior : MonoBehaviour
 {
-    public bool showWinScreen = false;
-    public bool showLossScreen = false;
-    public string labelText = "Collect all 4 items and win your freedom!";
+    bool showWinScreen = false;
+    bool showLossScreen = false;
+    string labelText = "Collect all 4 items and win your freedom!";
     public int EnemyAlive = 1;
     public bool Invulnerable = false;
     public float Timer = 0f;
@@ -22,6 +23,9 @@ public class GameBehavior : MonoBehaviour
     public GameObject WinPanel;
     public GameObject InvulerabilityPanel;
     public Text Restart;
+    public AudioMixer masterMixer;
+    public GameObject musicSlider;
+    public GameObject effectsSlider;
     public GameObject pauseScreen;
 
     SceneBehavior Scene;
@@ -43,6 +47,8 @@ public class GameBehavior : MonoBehaviour
         {
             PauseLevel();
         }
+
+
     }
     public void FixedUpdate()
     {
@@ -132,6 +138,18 @@ public class GameBehavior : MonoBehaviour
 
     }
 
+    public void EffectsSlider()
+    {
+        masterMixer.SetFloat("EffectsVol", effectsSlider.GetComponent<Slider>().value);
+
+    }
+
+
+    public void MusicSlider()
+    {
+        masterMixer.SetFloat("MusicVol", musicSlider.GetComponent<Slider>().value);
+
+    }
     public void PauseLevel()
     {
         Time.timeScale = 0;
