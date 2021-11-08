@@ -12,7 +12,7 @@ There are several added/changed items compared to the book's version such as:
  - Invulnerable buff/pickup
  - Health pickup
  - Ammo pickup
- - Changed game's goal from collecting items to kill all enemeis
+ - Changed game's goal from collecting items to kill all enemeies
  - redesigned UI
  - AI constantly hit player
 
